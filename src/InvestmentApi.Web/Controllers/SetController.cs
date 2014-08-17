@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Text;
 using System.Web.Http;
 using CsQuery;
@@ -20,7 +21,6 @@ namespace InvestmentApi.Web.Controllers
         [Route("ListedCompanies")]
         public IEnumerable<CompanyInfo> ListedCompanies()
         {
-            var result = new List<CompanyInfo>();
             var dom = CsQueryHelpers.GetUrl("http://www.set.or.th/listedcompany/static/listedCompanies_th_TH.xls", Encoding.GetEncoding("tis-620"));
             var rows = dom.Select("tr");
 
@@ -41,10 +41,28 @@ namespace InvestmentApi.Web.Controllers
                     WebSite = td[9].Text(),
                 };
 
-                result.Add(model);
+                yield return model;
             }
+        }
 
-            return result;
+        /// <summary>
+        /// สัญลักษณ์บริษัทจดทะเบียนในตลาดหลักทรัพย์ (ปรับปรุงข้อมูลทุกวันทำการแรกของแต่ละสัปดาห์)
+        /// </summary>
+        [HttpGet]
+        [Route("ListedCompanySymbols")]
+        public HttpResponseMessage ListedCompanySymbols()
+        {
+            var result = ListedCompanies().Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>
+            {
+                if (current == string.Empty) return item;
+
+                return current + Environment.NewLine + item;
+            });
+
+            return new HttpResponseMessage
+            {
+                Content = new StringContent(result, Encoding.UTF8, "text/plain")
+            };
         }
     }
 
