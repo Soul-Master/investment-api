@@ -511,5 +511,10 @@
              ข้อมูลบริษัทที่ถูกเพิกถอนในตลาดหลักทรัพย์
             </summary>
         </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50List">
+            <summary>
+            รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50 และ SET100
+            </summary>
+        </member>
     </members>
 </doc>
