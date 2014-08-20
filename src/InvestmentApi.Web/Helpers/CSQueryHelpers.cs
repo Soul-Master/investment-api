@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using CsQuery;
+using NPOI.SS.UserModel;
 
 namespace InvestmentApi.Web.Helpers
 {
@@ -15,9 +16,8 @@ namespace InvestmentApi.Web.Helpers
 
             if(text == null) return null;
             text = HttpUtility.HtmlDecode(text.Trim());
-            
-            if (text == "-") return null;
-            return text;
+
+            return text == "-" ? null : text.TrimText();
         }
 
         public static CQ GetUrl(string url, Encoding encoder)

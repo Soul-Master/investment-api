@@ -511,9 +511,39 @@
              ข้อมูลบริษัทที่ถูกเพิกถอนในตลาดหลักทรัพย์
             </summary>
         </member>
-        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50List">
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50ListedDate">
             <summary>
-            รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50 และ SET100
+            วันที่หลักทรัพย์ถูกใช้คำนวณดัชนี SET50
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set100ListedDate">
+            <summary>
+            วันที่หลักทรัพย์ถูกใช้คำนวณดัชนี SET100
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50(System.Nullable{System.DateTime})">
+            <summary>
+            รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50Symbols(System.Nullable{System.DateTime})">
+            <summary>
+            สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set100(System.Nullable{System.DateTime})">
+            <summary>
+            รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี Set100
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set100Symbols(System.Nullable{System.DateTime})">
+            <summary>
+            สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET100
+            </summary>
+        </member>
+        <member name="T:InvestmentApi.Web.Controllers.IndexCompanyInfo">
+            <summary>
+             ข้อมูลบริษัทจดทะเบียนในตลาดหลักทรัพย์
             </summary>
         </member>
     </members>
