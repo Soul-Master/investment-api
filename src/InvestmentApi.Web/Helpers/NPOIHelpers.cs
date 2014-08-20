@@ -19,9 +19,15 @@ namespace InvestmentApi.Web.Helpers
                 return new HSSFWorkbook(file);
             }
         }
+
         public static string GetCellText(this IRow row, int cellIndex)
         {
-            return row.GetCell(cellIndex).StringCellValue.TrimText();
+            var text = row.GetCell(cellIndex);
+
+            if (text == null) return null;
+            if (text.StringCellValue == null) return null;
+
+            return text.StringCellValue.TrimText();
         }
     }
 }

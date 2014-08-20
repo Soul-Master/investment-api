@@ -50,7 +50,7 @@ namespace InvestmentApi.Web.Controllers
         /// สัญลักษณ์ของบริษัทจดทะเบียนในตลาดหลักทรัพย์ (ปรับปรุงข้อมูลทุกวันทำการแรกของแต่ละสัปดาห์)
         /// </summary>
         [HttpGet]
-        [Route("ListedCompanySymbols")]
+        [Route("ListedCompany/Symbols")]
         public HttpResponseMessage ListedCompanySymbols()
         {
             var result = ListedCompanies().Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>
@@ -100,7 +100,7 @@ namespace InvestmentApi.Web.Controllers
         /// สัญลักษณ์ของบริษัทจดทะเบียนที่ถูกเพิกถอนในตลาดหลักทรัพย์
         /// </summary>
         [HttpGet]
-        [Route("DelistedCompanySymbols")]
+        [Route("DelistedCompany/Symbols")]
         public HttpResponseMessage DelistedCompanySymbols()
         {
             var result = DelistedCompanies().Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>

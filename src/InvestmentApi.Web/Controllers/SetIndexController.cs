@@ -58,6 +58,35 @@ namespace InvestmentApi.Web.Controllers
         }
 
         /// <summary>
+        /// วันที่หลักทรัพย์ถูกใช้คำนวณดัชนี SET50
+        /// </summary>
+        [HttpGet]
+        [Route("SetHDListedDate")]
+        public IEnumerable<DateRange> SetHDListedDate()
+        {
+            var thaiCulture = new CultureInfo("th-TH");
+            var dom = CsQueryHelpers.GetUrl("http://www.set.or.th/th/market/constituents.html", Encoding.GetEncoding("tis-620"));
+            var ul = dom.Select("li ul:eq(1)");
+            var children = ul.Children();
+
+            for (var i = 0; i < children.Length; i++)
+            {
+                var li = CQ.Create(children[i]);
+                var text = li.Text().Replace("ระหว่าง", "").Trim();
+                var tokens = text.Split(new[] { "ถึง" }, StringSplitOptions.RemoveEmptyEntries);
+                var link = li.Select("a");
+                var model = new DateRange
+                {
+                    StartDate = DateTime.ParseExact(tokens[0].Trim(), "d MMM yyyy", thaiCulture),
+                    EndDate = DateTime.ParseExact(tokens[1].Trim(), "d MMM yyyy", thaiCulture),
+                    DownloadLink = "http://www.set.or.th/th/market/" + link.Attr("href").Trim()
+                };
+
+                yield return model;
+            }
+        }
+
+        /// <summary>
         /// รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50
         /// </summary>
         [HttpGet]
@@ -99,7 +128,7 @@ namespace InvestmentApi.Web.Controllers
         /// สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50
         /// </summary>
         [HttpGet]
-        [Route("Set50Symbols")]
+        [Route("Set50/Symbols")]
         public HttpResponseMessage Set50Symbols(DateTime? listedDate = null)
         {
             var result = Set50(listedDate).Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>
@@ -157,10 +186,67 @@ namespace InvestmentApi.Web.Controllers
         /// สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET100
         /// </summary>
         [HttpGet]
-        [Route("Set100Symbols")]
+        [Route("Set100/Symbols")]
         public HttpResponseMessage Set100Symbols(DateTime? listedDate = null)
         {
             var result = Set100(listedDate).Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>
+            {
+                if (current == string.Empty) return item;
+
+                return current + Environment.NewLine + item;
+            });
+
+            return new HttpResponseMessage
+            {
+                Content = new StringContent(result, Encoding.UTF8, "text/plain")
+            };
+        }
+
+        /// <summary>
+        /// รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SETHD
+        /// </summary>
+        [HttpGet]
+        [Route("SetHD")]
+        public IEnumerable<IndexHDCompanyInfo> SetHD(DateTime? listedDate = null)
+        {
+            var availableDates = SetHDListedDate();
+            listedDate = DateTime.Now;
+
+            var selectedRange = availableDates
+                .Where(x => listedDate >= x.StartDate && listedDate <= x.EndDate)
+                .OrderByDescending(x => x.StartDate)
+                .First();
+
+            using (var temp = new TempFile())
+            {
+                FileHelper.DownloadFile(selectedRange.DownloadLink, temp.Path);
+                var wordbook = NPOIHelpers.OpenWorkbook(temp.Path);
+
+                var sheet = wordbook.GetSheet("SETHD-TH");
+                for (var i = 3; i < 33; i++)
+                {
+                    var row = sheet.GetRow(i);
+                    var model = new IndexHDCompanyInfo
+                    {
+                        Symbol = row.GetCellText(1),
+                        Name = row.GetCellText(2),
+                        BusinessSector = row.GetCellText(3),
+                        Comment = row.GetCellText(4)
+                    };
+
+                    yield return model;
+                }
+            }
+        }
+
+        /// <summary>
+        /// สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SETHD
+        /// </summary>
+        [HttpGet]
+        [Route("SetHD/Symbols")]
+        public HttpResponseMessage SetHDSymbols(DateTime? listedDate = null)
+        {
+            var result = SetHD(listedDate).Select(x => x.Symbol).Aggregate(string.Empty, (current, item) =>
             {
                 if (current == string.Empty) return item;
 
@@ -189,6 +275,22 @@ namespace InvestmentApi.Web.Controllers
         public string Symbol { get; set; }
         public string Name { get; set; }
         public string IndustryGroup { get; set; }
+        public string BusinessSector { get; set; }
+        public string Comment { get; set; }
+
+        public bool IsNewEntry
+        {
+            get { return Comment == "New Entry"; }
+        }
+    }
+
+    /// <summary>
+    ///  ข้อมูลบริษัทจดทะเบียนใน SETHD
+    /// </summary>
+    public class IndexHDCompanyInfo
+    {
+        public string Symbol { get; set; }
+        public string Name { get; set; }
         public string BusinessSector { get; set; }
         public string Comment { get; set; }
 

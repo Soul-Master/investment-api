@@ -521,6 +521,11 @@
             วันที่หลักทรัพย์ถูกใช้คำนวณดัชนี SET100
             </summary>
         </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.SetHDListedDate">
+            <summary>
+            วันที่หลักทรัพย์ถูกใช้คำนวณดัชนี SET50
+            </summary>
+        </member>
         <member name="M:InvestmentApi.Web.Controllers.SetIndexController.Set50(System.Nullable{System.DateTime})">
             <summary>
             รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET50
@@ -541,9 +546,24 @@
             สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SET100
             </summary>
         </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.SetHD(System.Nullable{System.DateTime})">
+            <summary>
+            รายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SETHD
+            </summary>
+        </member>
+        <member name="M:InvestmentApi.Web.Controllers.SetIndexController.SetHDSymbols(System.Nullable{System.DateTime})">
+            <summary>
+            สัญลักษณ์ของรายชื่อหลักทรัพย์ที่ใช้คำนวณดัชนี SETHD
+            </summary>
+        </member>
         <member name="T:InvestmentApi.Web.Controllers.IndexCompanyInfo">
             <summary>
              ข้อมูลบริษัทจดทะเบียนในตลาดหลักทรัพย์
+            </summary>
+        </member>
+        <member name="T:InvestmentApi.Web.Controllers.IndexHDCompanyInfo">
+            <summary>
+             ข้อมูลบริษัทจดทะเบียนใน SETHD
             </summary>
         </member>
     </members>
