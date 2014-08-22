@@ -12,9 +12,14 @@ namespace InvestmentApi.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.MapRoute(
+                "Area",
+                "",
+                new { controller = "Home", action = "Index" }
+            );
 
             routes.MapRoute(
-                name: "ActionApi",
+                name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { id = UrlParameter.Optional }
             );

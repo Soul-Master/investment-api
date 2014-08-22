@@ -260,6 +260,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\HelpPage\Views\Default\" />
     <Folder Include="Models\" />
     <Folder Include="Providers\" />
     <Folder Include="Results\" />
